@@ -89,6 +89,11 @@ EffectiveTldFetcher.prototype.getEffectiveTldPlusOne_ =
   if (host.indexOf(':') != -1) {
     host = host.substring(0, host.indexOf(':'));
   }
+
+  if (host == "localhost") {
+	  console.log("localhost");
+	  return host;
+  }
   // Loop over each possible subdomain, from longest to shortest, in order to
   // find the longest matching eTLD first.
   var next = host;
