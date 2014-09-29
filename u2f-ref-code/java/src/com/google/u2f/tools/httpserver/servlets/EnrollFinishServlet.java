@@ -28,7 +28,7 @@ public class EnrollFinishServlet extends HtmlServlet {
   public void generateBody(Request req, Response resp, PrintStream body) {
     RegistrationResponse registrationResponse = new RegistrationResponse(
         req.getParameter("enrollData"), req.getParameter("browserData"),
-        req.getParameter("sessionId"));
+        req.getParameter("sessionId"), req.getParameter("username"), req.getParameter("password"));
 
     try {
       SecurityKeyData tokenData = u2fServer.processRegistrationResponse(

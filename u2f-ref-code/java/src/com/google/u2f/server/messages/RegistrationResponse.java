@@ -15,11 +15,17 @@ public class RegistrationResponse {
 
   /** session id originally passed */
   private final String sessionId;
+  
+  private final String username;
+  
+  private final String password;
 
-  public RegistrationResponse(String registrationData, String bd, String sessionId) {
+  public RegistrationResponse(String registrationData, String bd, String sessionId, String username, String password) {
     this.registrationData = registrationData;
     this.bd = bd;
     this.sessionId = sessionId;
+    this.username = username;
+    this.password = password;
   }
 
   public String getRegistrationData() {
@@ -33,7 +39,14 @@ public class RegistrationResponse {
   public String getSessionId() {
     return sessionId;
   }
-
+  
+  public String getUsername() {
+	  return username;
+  }
+  
+  public String getPassword() {
+	  return password;
+  }
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -41,6 +54,8 @@ public class RegistrationResponse {
     result = prime * result + ((bd == null) ? 0 : bd.hashCode());
     result = prime * result + ((registrationData == null) ? 0 : registrationData.hashCode());
     result = prime * result + ((sessionId == null) ? 0 : sessionId.hashCode());
+    result = prime * result + ((username == null) ? 0 : username.hashCode());
+    result = prime * result + ((password == null) ? 0 : password.hashCode());
     return result;
   }
 
@@ -57,7 +72,7 @@ public class RegistrationResponse {
       if (other.bd != null)
         return false;
     } else if (!bd.equals(other.bd))
-      return false;
+        return false;
     if (registrationData == null) {
       if (other.registrationData != null)
         return false;
@@ -67,7 +82,17 @@ public class RegistrationResponse {
       if (other.sessionId != null)
         return false;
     } else if (!sessionId.equals(other.sessionId))
-      return false;
+        return false;
+    if (username == null) {
+      if (other.username != null)
+    	return false;
+    } else if (!username.equals(other.username))
+    	return false;
+    if (password == null) {
+       if (other.password != null)
+    	return false;
+    } else if(!password.equals(other.password))
+    	return false;
     return true;
   }
 }

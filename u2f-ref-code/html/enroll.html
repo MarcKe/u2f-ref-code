@@ -1,31 +1,36 @@
 <html>
-	<body>
-		<h1>Enroll</h1>
-		
+	<body>		
 		<script src="chrome-extension://pfboblefjcgdjicmnffhdgionmgcdmne/u2f-api.js"></script>
-		<script src="/enrollData.js?userName=userName"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>		
+		<script src="/enrollData.js"></script>
+		<script src="/jquery.cookie.js"></script>		
+		<script type="text/javascript">
+
+	                $('#txtarea').html('<h1>Press the Yubico Key now!</h1>');
+	                var registerRequest = {
+	        				appId: enrollData.appId,
+	        				challenge: enrollData.challenge,
+	        				version: enrollData.version
+	        		};
+	        		u2f.register([registerRequest], [], function (result) {
+	        			if (result.errorCode) {
+	        	        	document.getElementById('status').innerHTML = "Failed. Error code: " + result.errorCode;
+	        	        	return;
+	        			}
+	        			var uname = $.cookie("usernameCookie");
+	        			var pw = $.cookie("passwordCookie");
+	        			$.removeCookie("usernameCookie");        			
+	        			$.removeCookie("passwordCookie");
+		       			document.location = "/enrollFinish"
+	                     + "?browserData=" + result.clientData
+	                     + "&enrollData=" + result.registrationData
+	                     + "&challenge=" + enrollData.challenge
+	                     + "&sessionId=" + enrollData.sessionId
+		       			 + "&username=" + uname
+	        			 + "&password=" + pw;
+	        		});	                
+    	</script>	
 		
-		<div id="status">Waiting for user touch</div>
-		
-		<script>
-		  var registerRequest = {
-				appId: enrollData.appId,
-				challenge: enrollData.challenge,
-				version: enrollData.version
-		  };
-		  
-		  u2f.register([registerRequest], [], function (result) {
-			  if (result.errorCode) {
-	        document.getElementById('status')
-	          .innerHTML = "Failed. Error code: " + result.errorCode;
-	        return;
-			  }
-			  document.location = "/enrollFinish"
-              + "?browserData=" + result.clientData
-              + "&enrollData=" + result.registrationData
-              + "&challenge=" + enrollData.challenge
-              + "&sessionId=" + enrollData.sessionId;			  
-		  });
-		</script>
+    	<h1> Tap the gnubby now! </h1>
 	</body>
 </html>

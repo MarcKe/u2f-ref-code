@@ -38,15 +38,18 @@ public class SignRequest {
    * requests, and associate the responses with the correct request
    */
   private final String sessionId;
+  
+  private final String password;
 
   public SignRequest(String version, String challenge, String appId, String keyHandle,
-      String sessionId) {
+      String sessionId, String password) {
     super();
     this.version = version;
     this.challenge = challenge;
     this.appId = appId;
     this.keyHandle = keyHandle;
     this.sessionId = sessionId;
+    this.password = password;
   }
 
   public String getVersion() {
@@ -69,6 +72,9 @@ public class SignRequest {
     return sessionId;
   }
 
+  public String getPassword() {
+	return password;
+  }
   @Override
   public int hashCode() {
     final int prime = 31;

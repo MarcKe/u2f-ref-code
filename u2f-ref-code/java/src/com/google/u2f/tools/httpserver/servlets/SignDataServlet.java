@@ -28,12 +28,16 @@ public class SignDataServlet extends JavascriptServlet {
 
   @Override
   public void generateJavascript(Request req, Response resp, PrintStream body) throws Exception {
-    String userName = req.getParameter("userName");
+	String userName = req.getCookie("usernameCookie").getValue();
+	String password = req.getCookie("passwordCookie").getValue();
     if (userName == null) {
       resp.setStatus(Status.BAD_REQUEST);
       return;
     }
-
+    if (password == null) {
+    	resp.setStatus(Status.BAD_REQUEST);
+    	return;
+    }
     List<SignRequest> signRequests = u2fServer.getSignRequest(userName, "http://localhost:8080");
     JsonArray result = new JsonArray();
     
@@ -44,6 +48,7 @@ public class SignDataServlet extends JavascriptServlet {
       signServerData.addProperty("version", signRequest.getVersion());
       signServerData.addProperty("sessionId", signRequest.getSessionId());
       signServerData.addProperty("keyHandle", signRequest.getKeyHandle());
+      signServerData.addProperty("password", signRequest.getPassword());
       result.add(signServerData);
     }
 

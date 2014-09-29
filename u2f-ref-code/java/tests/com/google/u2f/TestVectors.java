@@ -28,6 +28,7 @@ public class TestVectors {
   //Test vectors from FIDO U2F: Raw Message Formats - Draft 4
   protected static final int COUNTER_VALUE = 1;
   protected static final String ACCOUNT_NAME = "test@example.com";
+  protected static final String ACCOUNT_PASSWORD = "test123";
   protected static final Set<String> TRUSTED_DOMAINS = ImmutableSet.of("http://example.com");
   protected static final String SESSION_ID = "session_id";
   protected static final String APP_ID_ENROLL = "http://example.com";

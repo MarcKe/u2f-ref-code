@@ -8,6 +8,7 @@ package com.google.u2f.tools.httpserver.servlets;
 
 import java.io.PrintStream;
 
+import org.simpleframework.http.Cookie;
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
 import org.simpleframework.http.Status;
@@ -26,10 +27,16 @@ public class EnrollDataServlet extends JavascriptServlet {
 
   @Override
   public void generateJavascript(Request req, Response resp, PrintStream body) throws Exception {
-    String userName = req.getParameter("userName");
+	
+    String userName = req.getCookie("usernameCookie").getValue();
+    String password = req.getCookie("passwordCookie").getValue();
     if (userName == null) {
       resp.setStatus(Status.BAD_REQUEST);
       return;
+    }
+    if (password == null) {
+    	resp.setStatus(Status.BAD_REQUEST);
+    	return;
     }
     RegistrationRequest registrationRequest = u2fServer.getRegistrationRequest(userName, "http://localhost:8080");
 

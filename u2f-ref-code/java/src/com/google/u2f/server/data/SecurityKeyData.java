@@ -19,16 +19,19 @@ public class SecurityKeyData {
   private final byte[] publicKey;
   private final X509Certificate attestationCert;
   private int counter;
+  private final String password;
 
   public SecurityKeyData(
 		  long enrollmentTime, 
 		  byte[] keyHandle, 
-		  byte[] publicKey, 
+		  byte[] publicKey,
+		  String password,
 		  X509Certificate attestationCert,
 		  int counter) {
     this.enrollmentTime = enrollmentTime;
     this.keyHandle = keyHandle;
     this.publicKey = publicKey;
+    this.password = password;
     this.attestationCert = attestationCert;
     this.counter = counter;
   }
@@ -54,6 +57,10 @@ public class SecurityKeyData {
   
   public int getCounter() {
 	return counter; 
+  }
+  
+  public String getPassword() {
+	  return password;
   }
   
   public void setCounter(int newCounterValue) {

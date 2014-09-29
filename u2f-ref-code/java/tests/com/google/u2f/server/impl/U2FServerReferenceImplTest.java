@@ -61,7 +61,7 @@ public class U2FServerReferenceImplTest extends TestVectors {
     when(mockDataStore.storeSessionData(Matchers.<EnrollSessionData>any())).thenReturn(SESSION_ID);
     when(mockDataStore.getTrustedCertificates()).thenReturn(trustedCertificates);
     when(mockDataStore.getSecurityKeyData(ACCOUNT_NAME)).thenReturn(
-        ImmutableList.of(new SecurityKeyData(0L, KEY_HANDLE, USER_PUBLIC_KEY_SIGN_HEX, VENDOR_CERTIFICATE, 0)));
+        ImmutableList.of(new SecurityKeyData(0L, KEY_HANDLE, USER_PUBLIC_KEY_SIGN_HEX, ACCOUNT_PASSWORD, VENDOR_CERTIFICATE, 0)));
   }
 
   @Test
@@ -94,12 +94,12 @@ public class U2FServerReferenceImplTest extends TestVectors {
         mockDataStore, cryto, TRUSTED_DOMAINS);
 
     RegistrationResponse registrationResponse = new RegistrationResponse(REGISTRATION_DATA_BASE64,
-        BROWSER_DATA_ENROLL_BASE64, SESSION_ID);
+        BROWSER_DATA_ENROLL_BASE64, SESSION_ID, ACCOUNT_NAME, ACCOUNT_PASSWORD);
 
     u2fServer.processRegistrationResponse(registrationResponse, 0L);
 
     verify(mockDataStore).addSecurityKeyData(eq(ACCOUNT_NAME),
-        eq(new SecurityKeyData(0L, KEY_HANDLE, USER_PUBLIC_KEY_ENROLL_HEX, VENDOR_CERTIFICATE, 0)));
+        eq(new SecurityKeyData(0L, KEY_HANDLE, USER_PUBLIC_KEY_ENROLL_HEX, ACCOUNT_PASSWORD, VENDOR_CERTIFICATE, 0)));
   }
 
   @Test
@@ -114,12 +114,12 @@ public class U2FServerReferenceImplTest extends TestVectors {
         mockDataStore, cryto, TRUSTED_DOMAINS);
 
     RegistrationResponse registrationResponse = new RegistrationResponse(REGISTRATION_DATA_2_BASE64,
-        BROWSER_DATA_2_BASE64, SESSION_ID);
+        BROWSER_DATA_2_BASE64, SESSION_ID, ACCOUNT_NAME, ACCOUNT_PASSWORD);
 
     u2fServer.processRegistrationResponse(registrationResponse, 0L);
 
     verify(mockDataStore).addSecurityKeyData(eq(ACCOUNT_NAME),
-        eq(new SecurityKeyData(0L, KEY_HANDLE_2, USER_PUBLIC_KEY_2, TRUSTED_CERTIFICATE_2, 0)));
+        eq(new SecurityKeyData(0L, KEY_HANDLE_2, USER_PUBLIC_KEY_2,ACCOUNT_PASSWORD, TRUSTED_CERTIFICATE_2, 0)));
   }
 
   @Test
@@ -131,7 +131,7 @@ public class U2FServerReferenceImplTest extends TestVectors {
     List<SignRequest> signRequest = u2fServer.getSignRequest(ACCOUNT_NAME, APP_ID_SIGN);
 
     assertEquals(new SignRequest("U2F_V2", SERVER_CHALLENGE_SIGN_BASE64, APP_ID_SIGN,
-        KEY_HANDLE_BASE64, SESSION_ID), signRequest.get(0));
+        KEY_HANDLE_BASE64, SESSION_ID, ACCOUNT_PASSWORD), signRequest.get(0));
   }
 
   @Test
@@ -170,7 +170,7 @@ public class U2FServerReferenceImplTest extends TestVectors {
 	when(mockDataStore.getSignSessionData(SESSION_ID)).thenReturn(
 	    new SignSessionData(ACCOUNT_NAME, APP_ID_2, SERVER_CHALLENGE_SIGN, USER_PUBLIC_KEY_2));
     when(mockDataStore.getSecurityKeyData(ACCOUNT_NAME)).thenReturn(
-        ImmutableList.of(new SecurityKeyData(0l, KEY_HANDLE_2, USER_PUBLIC_KEY_2, VENDOR_CERTIFICATE, 0)));
+        ImmutableList.of(new SecurityKeyData(0l, KEY_HANDLE_2, USER_PUBLIC_KEY_2, ACCOUNT_PASSWORD, VENDOR_CERTIFICATE, 0)));
     u2fServer = new U2FServerReferenceImpl(mockChallengeGenerator,
         mockDataStore, cryto, TRUSTED_DOMAINS);
     SignResponse signResponse = new SignResponse(BROWSER_DATA_2_BASE64, SIGN_DATA_2_BASE64,

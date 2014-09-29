@@ -74,9 +74,9 @@ public class U2FClientReferenceImpl implements U2FClient {
     byte[] rawRegisterResponse = RawMessageCodec.encodeRegisterResponse(registerResponse);
     String rawRegisterResponseBase64 = Base64.encodeBase64URLSafeString(rawRegisterResponse);
     String clientDataBase64 = Base64.encodeBase64URLSafeString(clientData.getBytes());
-
+    String password = "test";
     server.processRegistrationResponse(new RegistrationResponse(rawRegisterResponseBase64,
-        clientDataBase64, sessionId), System.currentTimeMillis());
+        clientDataBase64, sessionId, accountName, password), System.currentTimeMillis());
   }
 
   @Override

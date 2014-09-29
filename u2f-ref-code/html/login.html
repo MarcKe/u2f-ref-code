@@ -1,0 +1,27 @@
+<html>
+<body>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>	
+<script src="/jquery.cookie.js"></script>
+
+	<script type="text/javascript">
+			$(document).ready(function() {
+	            $("#registration").submit(function(e){
+	                e.preventDefault();	                
+		       			$.cookie("usernameCookie", $("#username").val());
+		                $.cookie("passwordCookie", $("#password").val());
+		       			document.location = "/sign";
+	        		});           
+	        });
+   </script>		
+		<h1>Test Registration</h1>
+		<form name="Registration" id="registration" action="" method=post>
+		    <p><strong>Please Enter Your User Name: </strong>
+		    <input type="text" placeholder="Username" id="username" name="username" size="25">
+		    <p><p><strong>Please Enter Your Password: </strong>
+		    <input type="password" size="15" id="password" placeholder="Password" name="password">
+		    <p><p>
+		    <input type="submit" value="Verify">
+		    <input type="reset" value="Reset">
+		</form>	
+</body>
+</html>

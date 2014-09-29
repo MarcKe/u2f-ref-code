@@ -101,11 +101,14 @@ public class U2fHttpServer {
     Container dispatchContainer = new RequestDispatcher()
         .registerContainer("/", new StaticHandler("text/html","html/index.html"))
         .registerContainer("/enroll", new StaticHandler("text/html","html/enroll.html"))
+        .registerContainer("/reg", new StaticHandler("text/html", "html/reg.html"))
         .registerContainer("/enrollData.js", new EnrollDataServlet(u2fServer))
         .registerContainer("/enrollFinish", new EnrollFinishServlet(u2fServer))
+        .registerContainer("/login", new StaticHandler("text/html", "html/login.html"))
         .registerContainer("/sign", new StaticHandler("text/html","html/sign.html"))
         .registerContainer("/signData.js", new SignDataServlet(u2fServer))
-        .registerContainer("/signFinish", new SignFinishServlet(u2fServer));
+        .registerContainer("/signFinish", new SignFinishServlet(u2fServer))
+        .registerContainer("/jquery.cookie.js", new StaticHandler("text/html", "html/jquery.cookie.js"));
 
     try {
       Connection connection = new SocketConnection(new ContainerServer(dispatchContainer));

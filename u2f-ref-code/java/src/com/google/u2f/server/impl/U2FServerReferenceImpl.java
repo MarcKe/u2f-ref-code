@@ -96,7 +96,8 @@ public class U2FServerReferenceImpl implements U2FServer {
     String sessionId = registrationResponse.getSessionId();
     String browserDataBase64 = registrationResponse.getBd();
     String rawRegistrationDataBase64 = registrationResponse.getRegistrationData();
-
+    String password = registrationResponse.getPassword();
+    
     EnrollSessionData sessionData = dataStore.getEnrollSessionData(sessionId);
 
     if (sessionData == null) {
@@ -136,7 +137,7 @@ public class U2FServerReferenceImpl implements U2FServer {
     byte[] browserDataSha256 = cryto.computeSha256(browserData.getBytes());
     byte[] signedBytes = RawMessageCodec.encodeRegistrationSignedBytes(appIdSha256, browserDataSha256,
         keyHandle, userPublicKey);
-
+    
     Set<X509Certificate> trustedCertificates = dataStore.getTrustedCertificates();
     if (!trustedCertificates.contains(attestationCertificate)) {
       Log.warning("attestion cert is not trusted");    
@@ -153,7 +154,7 @@ public class U2FServerReferenceImpl implements U2FServer {
     // We don't actually know what the counter value of the real device is - but it will
     // be something bigger (or equal) to 0, so subsequent signatures will check out ok.
     SecurityKeyData securityKeyData = new SecurityKeyData(currentTimeInMillis,
-        keyHandle, userPublicKey, attestationCertificate, /* initial counter value */ 0);
+        keyHandle, userPublicKey, password, attestationCertificate, /* initial counter value */ 0);
     dataStore.addSecurityKeyData(sessionData.getAccountName(), securityKeyData);
 
     Log.info("<< processRegistrationResponse");
@@ -184,9 +185,10 @@ public class U2FServerReferenceImpl implements U2FServer {
 
       String challengeBase64 = Base64.encodeBase64URLSafeString(challenge);
       String keyHandleBase64 = Base64.encodeBase64URLSafeString(keyHandle);
-
+      
+      String password = securityKeyData.getPassword();
       Log.info("<< getSignRequest " + accountName);
-      result.add(new SignRequest(U2FConsts.U2F_V2, challengeBase64, appId, keyHandleBase64, sessionId));
+      result.add(new SignRequest(U2FConsts.U2F_V2, challengeBase64, appId, keyHandleBase64, sessionId, password));
     }
     return result.build();
   }

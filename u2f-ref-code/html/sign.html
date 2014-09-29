@@ -1,10 +1,12 @@
 <html>
 	<body>
-		<h1>Sign</h1>
 		
     <script src="chrome-extension://pfboblefjcgdjicmnffhdgionmgcdmne/u2f-api.js"></script>
-		<script src="/signData.js?userName=userName"></script>
-		
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>		
+    <script src="/jquery.cookie.js"></script>		
+    <script src="/signData.js"></script>
+    
+		<h1>Sign</h1>
 		<div id="status">Waiting for user touch</div>
 		
 		<script>
@@ -23,6 +25,10 @@
 					  version: sd.version
 				  });
 			  });
+			  var uname = $.cookie("usernameCookie");
+	  		  var pw = $.cookie("passwordCookie");
+	  		  $.removeCookie("usernameCookie");        			
+	  		  $.removeCookie("passwordCookie");
 				
 			  u2f.sign(signRequests, function(result) {
 	        if (result.errorCode) {
@@ -30,8 +36,14 @@
 	              .innerHTML = "Failed. Error code: " + result.errorCode;
 	            return;
 	          }
-	          
+	        
 	          var incomingRequest = incomingSignData[result.keyHandle];
+	         
+	          if (incomingRequest.password != pw) {
+	        	  document.getElementById('status')
+	              .innerHTML = "Wrong password"
+	            return;
+	          }
 	          location = "/signFinish"
 	                + "?browserData=" + result.clientData
 	                + "&appId=" + incomingRequest.appId
